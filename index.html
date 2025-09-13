@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Jokes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #2c3e50; /* Darker background inspired by Minecraft's night sky */
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4">
+    <div class="bg-gray-800 p-8 md:p-12 rounded-3xl shadow-2xl max-w-2xl w-full text-center border-4 border-gray-700">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 text-emerald-400 drop-shadow-lg">
+            Minecraft Jokes
+        </h1>
+        <p class="text-lg md:text-xl text-gray-300 mb-8">
+            Click the button to hear a joke!
+        </p>
+        <div id="joke-container" class="min-h-24 bg-gray-700 p-6 rounded-2xl flex items-center justify-center mb-8 border-2 border-gray-600">
+            <p id="joke-text" class="text-xl md:text-2xl italic text-gray-100">
+                Are you ready for a laugh?
+            </p>
+        </div>
+        <button id="joke-button" class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105 active:scale-95 border-2 border-emerald-400 focus:outline-none focus:ring-4 focus:ring-emerald-400 focus:ring-opacity-50">
+            Tell Me a Joke!
+        </button>
+    </div>
+
+    <script>
+        const jokes = [
+            "What do you call a zombie that loves to party? The life of the party!",
+            "Why did the creeper cross the road? To get to the other side... and explode!",
+            "Why was the skeleton so bad at fighting? He didn't have the guts!",
+            "What's a ghast's favorite type of music? Anything with a good 'boo-gie'!",
+            "Why did the Enderman break up with the villager? He just couldn't handle the side-eye!",
+            "What do you get if you cross a cow with a sheep? A wooly bully!",
+            "What's the best way to travel the Nether? By minecart, of course. It's the most 'Nether'ious way to travel!",
+            "Why do creepers have such a big vocabulary? They have a lot of 'ex-plosive' words!",
+            "How do you know when a blaze is angry? It gets hot-headed!",
+            "What do you call a happy pig? A pork-chop-chop-joy!",
+            "Why don't Endermen get invited to parties? They can't stop staring!",
+            "What do you call an Enderman in a suit? A tele-porter!",
+            "Why did the Minecraft sheep get mad? He was fleeced!",
+            "What’s a skeleton's favorite snack? Ribs!",
+            "What’s a librarian villager’s favorite meal? Book-choy!",
+            "Why are witches so good at math? They're great at adding and 'sub-tracting'!"
+        ];
+
+        const jokeButton = document.getElementById('joke-button');
+        const jokeTextElement = document.getElementById('joke-text');
+
+        // Check for Web Speech API support
+        const synth = window.speechSynthesis;
+        let isSpeaking = false;
+
+        jokeButton.addEventListener('click', () => {
+            if (isSpeaking) {
+                synth.cancel();
+                isSpeaking = false;
+            }
+
+            const randomIndex = Math.floor(Math.random() * jokes.length);
+            const joke = jokes[randomIndex];
+            jokeTextElement.textContent = joke;
+            
+            if (synth) {
+                const utterance = new SpeechSynthesisUtterance(joke);
+                // Optional: set voice, pitch, and rate if desired
+                // utterance.voice = voices[voiceIndex];
+                // utterance.pitch = 1;
+                // utterance.rate = 1;
+
+                utterance.onstart = () => isSpeaking = true;
+                utterance.onend = () => isSpeaking = false;
+                utterance.onerror = (e) => {
+                    console.error('Speech synthesis error:', e);
+                    isSpeaking = false;
+                };
+
+                synth.speak(utterance);
+            }
+        });
+    </script>
+</body>
+</html>
